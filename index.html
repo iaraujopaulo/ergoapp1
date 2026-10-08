@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ErgoApp – análise postural RULA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>ErgoApp</h1>
+  <p>Envie uma foto ou vídeo e receba a pontuação RULA da postura.</p>
+  <button id="btnSettings" class="ghost" type="button">Chaves de API</button>
+</header>
+<main class="layout">
+  <section id="stage" class="stage">
+    <label id="drop" class="drop" for="file">
+      <strong>Solte uma foto ou vídeo aqui</strong>
+      <span>ou toque para escolher. A análise roda no seu navegador.</span>
+    </label>
+    <canvas id="cv"></canvas>
+    <div class="bar">
+      <label class="btn" for="file">Trocar arquivo</label>
+      <input id="file" type="file" accept="image/*,video/*" hidden>
+      <span id="vctl" hidden>
+        <button id="prev" class="btn" type="button">Quadro anterior</button>
+        <button id="play" class="btn" type="button">Reproduzir</button>
+        <button id="next" class="btn" type="button">Próximo quadro</button>
+      </span>
+    </div>
+    <p id="status" role="status">Carregando modelos…</p>
+    <div id="chips" class="chips"></div>
+  </section>
+
+  <aside class="side">
+    <div class="score">
+      <div id="ring" class="ring"><b id="sc">–</b></div>
+      <div><h2 id="lvl">Aguardando arquivo</h2><p id="sub">A pontuação vai de 1 a 7.</p></div>
+    </div>
+
+    <form id="ctx" class="ctx" onsubmit="return false">
+      <h3>Contexto da tarefa</h3>
+      <label class="chk"><input type="checkbox" name="supported"> Braço apoiado</label>
+      <label class="chk"><input type="checkbox" name="wristDev"> Punho desviado para o lado</label>
+      <label>Giro do punho
+        <select name="wristTwist"><option value="1">Na faixa intermediária</option><option value="2">Perto do limite</option></select></label>
+      <label>Atividade muscular (braços)
+        <select name="muscArm"><option value="0">Nenhuma</option><option value="1">Estática (mais de 1 min) ou repetida (4+ por min)</option></select></label>
+      <label>Força ou carga (braços)
+        <select name="forceArm"><option value="0">Menos de 2 kg, intermitente</option><option value="1">2 a 10 kg, intermitente</option><option value="2">2 a 10 kg, estática ou repetida</option><option value="3">Mais de 10 kg</option></select></label>
+      <label>Pernas
+        <select name="legs"><option value="1">Apoiadas e equilibradas</option><option value="2">Sem apoio ou desequilibradas</option></select></label>
+      <label>Atividade muscular (pescoço, tronco, pernas)
+        <select name="muscLeg"><option value="0">Nenhuma</option><option value="1">Estática ou repetida</option></select></label>
+      <label>Força ou carga (pescoço, tronco, pernas)
+        <select name="forceLeg"><option value="0">Menos de 2 kg, intermitente</option><option value="1">2 a 10 kg, intermitente</option><option value="2">2 a 10 kg, estática ou repetida</option><option value="3">Mais de 10 kg</option></select></label>
+    </form>
+
+    <div class="block"><h3>Detalhamento</h3><table id="bd"></table></div>
+
+    <div class="block">
+      <h3>Ambiente e recomendações</h3>
+      <div class="row">
+        <button id="btnVision" class="btn" type="button">Detectar ambiente (Cloud Vision)</button>
+        <button id="btnAI" class="btn solid" type="button">Gerar recomendações (Gemini)</button>
+      </div>
+      <pre id="ai"></pre>
+    </div>
+  </aside>
+</main>
+
+<dialog id="dlg">
+  <form method="dialog">
+    <h3>Chaves de API</h3>
+    <p class="note">Ficam salvas só neste navegador. Restrinja cada chave ao seu domínio no Google Cloud. A imagem é enviada ao Google apenas quando você aciona Cloud Vision ou Gemini.</p>
+    <label>Cloud Vision <input id="vk" type="password" autocomplete="off"></label>
+    <label>Gemini (Google AI Studio) <input id="gk" type="password" autocomplete="off"></label>
+    <label>Modelo Gemini <input id="gm" type="text"></label>
+    <div class="row"><button class="btn" value="cancel">Cancelar</button><button id="save" class="btn solid" value="ok">Salvar chaves</button></div>
+  </form>
+</dialog>
+<script type="module" src="app.js"></script>
+</body>
+</html>
